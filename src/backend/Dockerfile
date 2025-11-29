@@ -5,19 +5,19 @@ FROM python:3.12-slim
 RUN apt-get update && \
     apt-get upgrade --yes
 
-RUN useradd --create-home forgetful_gardner
-USER forgetful_gardner
-WORKDIR /home/forgetful_gardner
+RUN useradd --create-home user
+USER user
+WORKDIR /home/user
 
-ENV VIRTUALENV=/home/forgetful_gardner/venv
+ENV VIRTUALENV=/home/user/venv
 RUN python3 -m venv $VIRTUALENV
 ENV PATH="$VIRTUALENV/bin:$PATH"
 
-COPY --chown=forgetful_gardner ./pyproject.toml ./
+COPY --chown=user ./pyproject.toml ./
 RUN python -m pip install --upgrade pip setuptools
 
-COPY --chown=forgetful_gardner ./src/ src/
+COPY --chown=user ./src/ src/
 RUN python -m pip install .
 
-EXPOSE 8001
+EXPOSE 8000
 CMD ["sh", "src/entrypoint.sh"]
